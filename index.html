@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul>
+        <li><a onclick="route()" href="/beranda">Beranda</a></li>
+        <li><a onclick="route()" href="/about">About</a></li>
+        <li><a onclick="route()" href="/contactUs">Contact Us</a></li>
+    </ul>
+
+    <div id="main-page">
+
+    </div>
+
+    <script>
+        function route(event){
+            event = event || window.event;
+            event.preventDefault();
+            window.history.pushState({},"",event.target.href);
+            urlLocationHandler();
+        }
+
+        const urlRoute = {
+            "/beranda": "pages/beranda.html",
+            "/about": "pages/about.html",
+            "/contactUs": "pages/contactUs.html"
+        }
+
+        async function urlLocationHandler(){
+            const path = window.location.pathname;
+            if(path != "/"){
+                const route = urlRoute[path] // urlRoute["/beranda"] = "pages/beranda.html"
+                const content = await fetch(route).then(data => data.text());
+                document.getElementById("main-page").innerHTML = content;
+            }
+        }
+
+        window.onpopstate = urlLocationHandler;
+        window.route = route;
+
+        urlLocationHandler();
+    </script>
+</body>
+</html>
